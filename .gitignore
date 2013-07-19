@@ -3,6 +3,7 @@ roms
 Fuse for Mac OS X
 misc.asm
 .DS_Store
+bin2tap/bin2tap
 *.bin
 *.tap
 *.o
