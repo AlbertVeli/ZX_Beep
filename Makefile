@@ -36,8 +36,20 @@ $(BIN): $(SRC) $(AS) $(INCSRCS)
 $(BIN2TAP):
 	make -C bin2tap
 
-$(AS):
+$(AS): $(AS).c
 	make -C $(ASDIR)
+
+$(AS).c:
+	@echo ""
+	@echo "It looks like the z80asm submodule is missing!"
+	@echo "I will try to fetch it for you."
+	@echo "If this fails, run the following commands manually:"
+	@echo ""
+	@echo "  git submodule init"
+	@echo "  git submodule update"
+	@echo ""
+	git submodule init
+	git submodule update
 
 freqs: freqs.o
 	$(CC) $(LDFLAGS) -o $@ freqs.o $(LIBS)
