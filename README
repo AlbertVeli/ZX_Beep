@@ -14,7 +14,7 @@ your mind as a hammer or a wheelbarrow assists your muscles."
 The purpose of this repository is primarily to be a skeleton you can
 base your own ZX Spectrum projects upon. It compiles assembly code and
 outputs a TAP-file, which can be read by most Spectrum emulators. I
-have only tried it with: http://fuse-emulator.sourceforge.net/
+use fuse. http://fuse-emulator.sourceforge.net/
 
 
 BACKGROUND
@@ -30,10 +30,11 @@ childhood with tools like fuse, and even write new code for it.
 BUT WHAT DOES IT DO?
 
 ZX Beep repeatedly calls the BEEPER subroutine in the Spectrum ROM to
-play some sweeping sound effects and an example song. The song is an old
-Swedish marching tune called Mandom Mod (only the first half), written
-a long time ago in a town far, far away [Orsa], long before the age of
-impeding copyright claims. http://runeberg.org/vitaband/0123.html
+play some sweeping sound effects and an example song called Mandom
+Mod. A marching tune written a long time ago in a place far, far away
+(Orsa/Dalarna), long before the age of impeding copyright claims.
+
+http://albertveli.github.io/ZX_Beep/img/mandom_mod.png
 
 
 BUILD
@@ -43,51 +44,61 @@ these can be found in the packages git, make and gcc:
 
   apt-get install git make gcc
 
-See help.github.com/articles/set-up-git for more info on installing
+See http://help.github.com/articles/set-up-git for info on installing
 git on various systems.
 
-I have also compiled the code on OSX Mountain Lion where make and gcc
-is installed by default, but git had to be installed manually. On
-Windows it might work with MinGW, but I have not tried this.
+I have successfully compiled the code on Gentoo, Debian and OS X
+Mountain Lion. OS X had make and gcc installed by default, so I only
+had to install git. On Windows it may work with MinGW + git, but this
+is untested.
 
-Ok, lets go. Check out the ZX Beep source code from github:
+Ok, lets go. Fetch the ZX Beep source code from github:
 
   git clone https://github.com/AlbertVeli/ZX_Beep.git
 
-And build everything with make:
+And build it with make:
 
   make
 
 If everything works out, beep.tap should be created.
 
-To create your own TAP-file, just edit the first lines in the Makefile
-(SRC and INCSRCS), and create your own .asm files.
 
-If you want to use it as-is and only create a new song, rename
-mandom_mod.asm to the name of your song, and change the notes
-data. Then change the string "mandom_mod.asm" in Makefile to your own
-filename. You may also want to remove the calls to sweep_octave from
-beep.asm.
+MODIFY
+
+To create your own TAP-file, edit the first lines in the Makefile (SRC
+and INCSRCS), and replace with your own .asm file(s).
+
+If you want to use it as-is and only create a new song, copy
+mandom_mod.asm to a new file with the name of your song and change the
+notes data. Then replace the string "mandom_mod.asm" in Makefile /
+beep.asm. If you some of the mandom_mod labels in the song file, do
+the corresponding changes in beep.asm.
+
+You may also want to remove the line 'include "sweep.asm"' and the
+calls to sweep_octave from beep.asm to save some precious space. To
+save even more space it is possible to remove entire octaves from
+octaves.asm (but only at the beginning and at the end). You can for
+instance remove the A1, A6 and A7 octaves if they are not used.
 
 
 SONG DATA
 
-Data structure: enter frequency/length data byte-pairs as:
+Structure: Each note contains of a Pitch,Length pair in the range
+           0-255 (one byte).
 
-  Pitch,Len
 
-where
-
-Pitch    (A2 = A number 2 on a piano)
-=====
+Pitch = number of semitones above the first note. If A2 (A number
+        2 on piano) is the base octave, the pitch values becomes:
 
  0 A2,  1 Bb,  2 B,  3 C,  4 C#,  5 D,  6 Eb,  7 E,  8 F,  9 F#,  10 G,  11 G#
 12 A3, 13 Bb, 14 B, 15 C, 16 C#, 17 D, 18 Eb, 19 E, 20 F, 21 F#,  22 G,  23 G#
 24 A4, 25 Bb, 26 B, 27 C, 28 C#, 29 D, 30 Eb, 31 E, 32 F, 33 F#,  34 G,  35 G#
 etc
 
-Len    1 -> Whole note (1 s)
-===    2 -> Half note (1/2 s)
+Length = Duration of note:
+
+       1 -> Whole note (1 s)
+       2 -> Half note (1/2 s)
        3 -> Quarter note (1/4 s)
        4 -> Eigth note (1/8 s)
        5 -> Sixteenth note (1/16 s)
@@ -108,25 +119,25 @@ disassembly:
  http://www.wearmouth.demon.co.uk/zx82.htm#L03B5
 
 The algorithm given in the disassembly translates from frequency (Hz)
-to register value (for HL). But you still have to calculate the
-frequencies for all notes.
+to register values. But we also need to calculate what frequency to
+use somehow.
 
-To complicate matters, there are many ways to calculate tone
-frequencies. The standardized way is to use 440 Hz for the fourth A on
-a piano (A4) and calculate the rest of the frequencies relative 440 Hz
-with an algorithm called EQUAL TEMPERAMENT. If n is the number of
-semitones away from A4, then the wanted frequency becomes:
+It turns out there are many ways to calculate tone frequencies. The
+standard way is to use 440 Hz for the fourth A on a piano (A4) and
+calculate the rest of the frequencies relative 440 Hz with the
+alorithm EQUAL TEMPERAMENT. With this algorithm the frequency for a
+note n semitones away from A4 becomes:
 
-  440 * 2^(n/12)
+Freq(n) = 440 * 2^(n/12)
 
 This works for all keys (because the errors are evenly distributed).
 
-But if you want to fine tune harmonies for a specific key, then a guy
-named Helmholtz figured out more optimal frequencies. The following
-ratios (relative the base note frequency) can be used to calculate the
-12 notes in an octave:
+But if you want to fine tune harmonies for a specific key, Hermann von
+Helmholtz (in the book "Sensations of Tone", published 1863) figured
+out more optimal frequencies. The following ratios (relative the base
+note frequency) can be used to calculate the 12 notes in an octave:
 
-  1       ;  0 Unison
+  1  / 1  ;  0 Unison
   25 / 24 ;  1 Minor Second
   9  / 8  ;  2 Major Second
   6  / 5  ;  3 Minor Third
@@ -139,30 +150,34 @@ ratios (relative the base note frequency) can be used to calculate the
   9  / 5  ; 10 Minor Seventh
   15 / 8  ; 11 Major Seventh
 
-So, if A4 is 440 Hz, then a C4 (minor third) becomes 440 * (6/5) = 528
-Hz using Helmholtz's harmonic scale (aka JUST scale). Helmholtz based
-his work on older philosophical writings of guys like Pythagoras et
-al.
+This is called the JUST scale (aka Harmonic or Helmholtz). Helmholtz
+based his work on older philosophical writings attributed to people
+like Pythagoras, Andreas Werckmeister et al. The essence is: lower
+numbers in the ratio -> better harmony.
 
-These JUST frequencies, with low-integer ratios, were used by guys
-like Verdi and are sometimes refered to as Verdi tuning (or harmonic,
-or Helmholtz). The downside of JUST scale is that you have to change
-the frequencies to play a song in a different key. EQUAL TEMPERAMENT
-is a compromise tuning that works equally well (or bad) for all
-keys. For a visualisation using Lissajous curves, see
-youtu.be/BhZpvGSPx6w
+Example. A4 = 440 Hz, C (minor third) becomes:
 
-In the repository the frequency calculations have already been done by
-freqs.c and the results are pasted into octaves.asm to be used as a
-lookup-table (by beeper, in beep.asm).
+         JUST        ; 440 * (6/5)    = 528 Hz
+	 EQ.TEMPERED ; 440 * 2^(3/12) = 523.25 Hz
 
-To change scale, compile freqs.c by running "make freqs" and generate
-the frequencies of your choice.
+The difference is easily heard by the naked ear. Try playing two
+tones, 440 and 528 Hz together. Then compare to 440 / 523.25 Hz. The
+first tone-pair gives cleaner harmony (it is possible to visualize the
+difference using Lissajous curves).
 
-Example. To generate seven octaves in JUST scale, starting at C = 256
-Hz (sometimes referred to as scientific pitch, because all C:s becomes
-powers of two, and the other notes low-integer ratios of powers of
-two) run:
+The downside of JUST scale is that frequencies has to be re-calculated
+to play a song in a different key. EQUAL TEMPERAMENT is a compromise
+tuning that works equally well (or bad) for all keys.
+
+These frequency calculations are performed by freqs.c and output to
+octaves.asm. The pre-calculated lookup-tables in octaves.asm are then
+used by the beeper routine in beep.asm. To change scale, compile
+freqs.c by running "make freqs" and generate the frequencies of your
+choice.
+
+Example. Seven octaves in JUST scale, starting at C = 256 Hz (makes
+C:s powers of two and the other notes low-integer ratios in relation
+to powers of two) run:
 
  ./freqs -o 7 -j 256
 
@@ -171,6 +186,18 @@ starting at 110 Hz (A, two octaves below 440 Hz), run:
 
  ./freqs -o 6 110
 
+Paste the output into octaves.asm and build a new TAP.
+
+
+EXTERNAL CODE USED
+
+- z80asm  ; http://www.nongnu.org/z80asm/
+- bin2tap ; http://zeroteam.sk/bin2tap.html
+
+Bin2tap is included in the source tree (undmodified, only a Makefile
+was added) and z80asm is included as a git submodule. The submodule
+will be fetched the first time you run make.
+
 
 REFERENCES
 
@@ -178,7 +205,7 @@ REFERENCES
   written. Start there.
   http://www.worldofspectrum.org/ZXBasicManual/index.html
 
-- World of Spectrum has links tho all things Spectrum.
+- World of Spectrum has links tho all things Spectrum
   http://www.worldofspectrum.org/
 
 - Introduction to Z80 Assembler
@@ -197,5 +224,8 @@ Happy Hacking!
 
 
 * Each Machine Cycle takes 3-6 T-cycles (real CPU clock
-  cycles). Spectrum runs the Z80 at 3.5 MHz. So if an instruction
-  takes 9 T-cycles, it will execute in 9/3500000 seconds.
+  cycles). Spectrum runs the Z80 at 3.5 MHz. Example. If an
+  instruction takes 9 T-cycles it will execute in 9/3500000 seconds =
+  2.57 microseconds. Z80 was pretty deterministic. Modern CPU:s are
+  more unreliable when it comes to timing (caches, pipelining etc
+  complicate matters).
