@@ -71,8 +71,8 @@ and INCSRCS), and replace with your own .asm file(s).
 If you want to use it as-is and only create a new song, copy
 mandom_mod.asm to a new file with the name of your song and change the
 notes data. Then replace the string "mandom_mod.asm" in Makefile /
-beep.asm. If you some of the mandom_mod labels in the song file, do
-the corresponding changes in beep.asm.
+beep.asm. If you change some of the mandom_mod labels in the song
+file, remember to do the corresponding changes in beep.asm.
 
 You may also want to remove the line 'include "sweep.asm"' and the
 calls to sweep_octave from beep.asm to save some precious space. To
@@ -83,7 +83,7 @@ instance remove the A1, A6 and A7 octaves if they are not used.
 
 SONG DATA
 
-Structure: Each note contains of a Pitch,Length pair in the range
+Structure: Each note consist of a Pitch,Length pair in the range
            0-255 (one byte).
 
 
@@ -155,15 +155,16 @@ based his work on older philosophical writings attributed to people
 like Pythagoras, Andreas Werckmeister et al. The essence is: lower
 numbers in the ratio -> better harmony.
 
-Example. A4 = 440 Hz, C (minor third) becomes:
+Example. A4 = 440 Hz, C (minor third relative A, 3 semitones up)
+         becomes:
 
          JUST        ; 440 * (6/5)    = 528 Hz
 	 EQ.TEMPERED ; 440 * 2^(3/12) = 523.25 Hz
 
-The difference is easily heard by the naked ear. Try playing two
+The difference can easily be heard by the naked ear. Try playing two
 tones, 440 and 528 Hz together. Then compare to 440 / 523.25 Hz. The
-first tone-pair gives cleaner harmony (it is possible to visualize the
-difference using Lissajous curves).
+first tone-pair gives cleaner harmony (it is also possible to
+visualize this difference using Lissajous curves).
 
 The downside of JUST scale is that frequencies has to be re-calculated
 to play a song in a different key. EQUAL TEMPERAMENT is a compromise
@@ -176,8 +177,8 @@ freqs.c by running "make freqs" and generate the frequencies of your
 choice.
 
 Example. Seven octaves in JUST scale, starting at C = 256 Hz (makes
-C:s powers of two and the other notes low-integer ratios in relation
-to powers of two) run:
+all C:s powers of two and the other notes low-integer ratios in
+relation to powers of two) run:
 
  ./freqs -o 7 -j 256
 
