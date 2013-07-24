@@ -16,9 +16,21 @@ INCSRCS = octaves.asm sweep.asm mandom_mod.asm
 
 TAP = $(PROGGY).tap
 BIN = $(PROGGY).bin
-BIN2TAP = bin2tap/bin2tap
-# bin2tap options, see bin2tap subdir for documentation
-B2TOPTS = -c 32767 -r 32768 -hp -cb 7 -cp 7 -ci 0
+ZXTAP = ZX_Tap/zxtap
+# zxtap options
+REMS = \
+-r "   __" \
+-r "  |--|         _" \
+-r "  |  |        |~" \
+-r " () ()        |" \
+-r "        |\   ()" \
+-r "        | \\" \
+-r "       () |" \
+-r "          |" \
+-r "         ()"
+SCREEN = ZX_Tap/examples/googledoodle.scr
+ZXTOPTS = $(REMS) -s $(SCREEN) -b 0 -p 0 -i 7
+
 ASDIR = z80asm
 AS = $(ASDIR)/z80asm
 
@@ -27,14 +39,14 @@ CFLAGS = -O2 -W -Wall
 
 all: $(TAP)
 
-$(TAP): $(BIN) $(BIN2TAP)
-	$(BIN2TAP) -o $@ -b $(B2TOPTS) $(BIN)
+$(TAP): $(BIN) $(ZXTAP)
+	$(ZXTAP) -o $@ $(ZXTOPTS) $(BIN)
 
 $(BIN): $(SRC) $(AS) $(INCSRCS)
 	$(AS) -o $@ $(SRC)
 
-$(BIN2TAP):
-	make -C bin2tap
+$(ZXTAP):
+	make -C ZX_Tap
 
 $(AS): $(AS).c
 	make -C $(ASDIR)
@@ -60,5 +72,5 @@ clean:
 	rm -f $(TAP) $(BIN) freqs freqs.o *~
 
 distclean: clean
-	make -C bin2tap clean
+	make -C ZX_Tap clean
 	make -C $(ASDIR) clean

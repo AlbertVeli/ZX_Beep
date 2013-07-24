@@ -1,0 +1,51 @@
+ ______     __  __        ______   ______     ______
+/\___  \   /\_\_\_\      /\__  _\ /\  __ \   /\  == \
+\/_/  /__  \/_/\_\/_     \/_/\ \/ \ \  __ \  \ \  _-/
+  /\_____\   /\_\/\_\       \ \_\  \ \_\ \_\  \ \_\
+  \/_____/   \/_/\/_/        \/_/   \/_/\/_/   \/_/
+
+Create BASIC loader for ZX Spectrum BIN binary in TAP
+format (ZX Spectrum tape image).
+
+Usage: zxtap [OPTIONS] <BIN-file>
+
+MANDATORY
+
+BIN-file      - Name of file containing Z80 machine code
+
+
+OPTIONS         Description             [Defaults]
+-------         -----------             ----------
+-o <TAP-file> - Name of output TAP-file [basename of BIN-file + .tap]
+-l <address>  - Load address for BIN    [32768]
+-n            - No BASIC loader (only CODE data)
+
+BASIC loader OPTIONS
+-c <address>  - Clear address           [32767]
+-j <address>  - Jump address for loader [32768]
+                (USR <jump address>)
+-s <SCR-file> - Load SCREEN$ file before BIN
+-b <colour>   - Border colour  (0-7)    [7]
+-p <colour>   - Paper colour   (0-7)    [7]
+-i <colour>   - Ink colour     (0-7)    [0]
+-r <comment>  - Insert REM-comment
+
+
+EXAMPLES
+
+Create hello.tap from hello.bin:
+
+ zxtap hello.bin
+
+Create test.tap with multiple REMs at beginning of loader:
+
+ zxtap -r "+-----------+" -r "| Test v1.0 |" -r "+-----------+" test.bin
+
+10 REM +-----------+
+20 REM | Test v1.0 |
+30 REM +-----------+
+40 rest of loader...
+
+Load SCREEN$ with black border before bin:
+
+ zxtap -s examples/googledoodle.scr -b 0 -p 0 -i 7 examples/test.bin

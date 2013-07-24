@@ -193,11 +193,9 @@ Paste the output into octaves.asm and build a new TAP.
 EXTERNAL CODE USED
 
 - z80asm  ; http://www.nongnu.org/z80asm/
-- bin2tap ; http://zeroteam.sk/bin2tap.html
 
-Bin2tap is included in the source tree (undmodified, only a Makefile
-was added) and z80asm is included as a git submodule. The submodule
-will be fetched the first time you run make.
+Z80asm is included as a git submodule. The submodule will be fetched
+the first time you run make.
 
 
 REFERENCES
