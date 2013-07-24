@@ -18,4 +18,4 @@ $(PROGGY): $(OBJS)
 .PHONY: clean
 
 clean:
-	rm -f $(PROGGY) $(OBJS) *~
+	rm -f $(PROGGY) $(PROGGY).exe $(OBJS) *~

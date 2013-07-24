@@ -1,6 +1,9 @@
 misc
 Fuse for Mac OS X
+beep.bin
+ZX_Tap/zxtap
 .DS_Store
 *.tap
 *.o
 *~
+*.exe

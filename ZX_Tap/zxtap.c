@@ -76,14 +76,14 @@ static int get_binlen(const char *filename)
 
 static int open_files(void)
 {
-   binfp = fopen(opt.binfile, "r");
+   binfp = fopen(opt.binfile, "rb");
    if (!binfp) {
       perror(opt.binfile);
 
       return 1;
    }
 
-   tapfp = fopen(opt.tapfile, "w");
+   tapfp = fopen(opt.tapfile, "wb");
    if (!tapfp) {
       perror(opt.tapfile);
       fclose(binfp);
@@ -92,7 +92,7 @@ static int open_files(void)
    }
 
    if (opt.scrfile) {
-      scrfp = fopen(opt.scrfile, "r");
+      scrfp = fopen(opt.scrfile, "rb");
       if (!scrfp) {
          perror(opt.scrfile);
          fclose(binfp);
