@@ -14,9 +14,9 @@
  * 60 RANDOMIZE USR 32768
  * 70 PRINT USR VAL "32768"
  * 80 PRINT USR 32768
+ * 90 INK 0 : PAPER 7 : BORDER 7
  *
- * Appending multiple statements on one line, separated by : is not
- * supported (yet).
+ * All tokens must be surrouded by whitespace.
  *
  *
  * Boomtime, the 56th day of Confusion in the YOLD 3179
@@ -78,13 +78,7 @@
  * | F8 SAV| F9 RAN| FA IF | FB CLS| FC DRW| FD CLR| FE RET| FF CPY|
  */
 
-/* lno  len BDR VAL "   7 "  : PAP VAL "   7 "  : INK VAL "  0 "  ENTER
- * 0014 1200 e7  b0 22 37 22 3a da  b0 22 37 22 3a d9 b0 22 30 22 0d
- *          BDR  7     7 num     : PAP 7
- * 001e 1b00 e7 37 0e0000070000 3a da 37 0e0000070000 etc
- */
-
-/* Some example lines
+/* Some example line encodings
  *
  * BASIC                    ; Lineno     Length     Basic code              ENTER
  * 10 CLEAR VAL "32767"     ; "\x00\x0a" "\x0a\x00" "\xfd\xb0\"32767\""     "\x0d"
@@ -635,11 +629,11 @@ int main(void)
    /* if (basic_add_line("50 LOAD \"mcode\" CODE")) return 1; */
    /* if (basic_add_line("60 LOAD \"\"")) return 1; */
 
-   /* printf("\nBASIC:\n"); */
-   /* for (i = 0; i < basiclen; i++) { */
-   /*    printf(" %02x", (uint8_t)basicbuf[i]); */
-   /* } */
-   /* printf("\n"); */
+   printf("\nBASIC:\n");
+   for (i = 0; i < basiclen; i++) {
+      printf(" %02x", (uint8_t)basicbuf[i]);
+   }
+   printf("\n");
 
    return 0;
 }
