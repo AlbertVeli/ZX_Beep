@@ -49,8 +49,8 @@ git on various systems.
 
 I have successfully compiled the code on Gentoo, Debian and OS X
 Mountain Lion. OS X had make and gcc installed by default, so I only
-had to install git. On Windows it may work with MinGW + git, but this
-is untested.
+had to install git. On Windows it is possible to compile it using
+Msys+MinGW+Git, see mingw_install.rtf.
 
 Ok, lets go. Fetch the ZX Beep source code from github:
 
