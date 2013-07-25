@@ -1,0 +1,15 @@
+Fix for MinGW (remove \r from pass.err before diffing)
+--- z80asm/tests/Makefile
++++ z80asm/tests/Makefile
+@@ -23,8 +23,9 @@ all: pass
+ %: %.asm %.correct-err %.correct-bin ../z80asm Makefile
+ 	../z80asm -I ../headers $< -o $@.bin 2> $@.err
+ 	diff $@.correct-bin $@.bin
+-	diff $@.correct-err $@.err
+-	rm $@.bin $@.err
++	tr -d '\r' < $@.err > $@_no_0d.err
++	diff $@.correct-err $@_no_0d.err
++	rm $@.bin $@.err $@_no_0d.err
+ 
+ clean:
+ 	rm -f *-actual.err *.bin

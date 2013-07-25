@@ -62,6 +62,10 @@ $(AS).c:
 	@echo ""
 	git submodule init
 	git submodule update
+	# This is a workaround because I dont know
+	# how to push to a 3d party git submodule which
+	# I dont have write permissions to.
+	patch -Np0 -r - < z80asm_mingw_newlines.patch
 
 freqs: freqs.o
 	$(CC) $(LDFLAGS) -o $@ freqs.o $(LIBS)
