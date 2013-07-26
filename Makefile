@@ -37,6 +37,9 @@ AS = $(ASDIR)/z80asm
 # Flags (for freqs.c)
 CFLAGS = -O2 -W -Wall
 
+# Detect if running under MinGW
+UNAME := $(patsubst MINGW%,MINGW,$(shell uname))
+
 all: $(TAP)
 
 $(TAP): $(BIN) $(ZXTAP)
@@ -62,10 +65,12 @@ $(AS).c:
 	@echo ""
 	git submodule init
 	git submodule update
+ifeq ($(UNAME), MINGW)
 	# This is a workaround because I dont know
 	# how to push to a 3d party git submodule which
 	# I dont have write permissions to.
 	patch -Np0 -r - < z80asm_mingw_newlines.patch
+endif
 
 freqs: freqs.o
 	$(CC) $(LDFLAGS) -o $@ freqs.o $(LIBS)
