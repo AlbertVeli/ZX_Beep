@@ -28,9 +28,8 @@ REMS = \
 -r "       () |" \
 -r "          |" \
 -r "         ()"
-SCREEN = ZX_Tap/examples/googledoodle.scr
-#ZXTOPTS = $(REMS) -s $(SCREEN) -b 0 -p 0 -i 7
-ZXTOPTS =
+SCREEN = ZX_Tap/examples/beethoven.scr
+ZXTOPTS = $(REMS) -s $(SCREEN) -b 0 -p 7 -i 0
 
 ASDIR = z80asm
 AS = $(ASDIR)/z80asm

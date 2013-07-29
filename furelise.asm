@@ -145,7 +145,7 @@ dn_loop:
 	push	bc
 	push	de
 	;; p1
-	ld	a, 7
+	ld	a, 6
 	call	beeper
 	;; p2
 	pop	de
@@ -167,7 +167,7 @@ dn_loop:
 	;; p1
 	pop	de
 	push	de
-	ld	a, 6
+	ld	a, 7
 	call	beeper
 	;; p2
 	pop	de
