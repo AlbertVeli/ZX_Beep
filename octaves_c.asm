@@ -66,3 +66,16 @@ C6:
 	dw	$00dd, $06d0  ; 1744.170 Hz, Major Sixth
 	dw	$00cb, $075c  ; 1883.704 Hz, Minor Seventh
 	dw	$00c1, $07aa  ; 1962.192 Hz, Major Seventh
+C7:
+        dw      $00b4, $082d  ; 2093.005 Hz, Unison
+        dw      $00ab, $0884  ; 2180.213 Hz, Minor Second
+        dw      $009c, $0933  ; 2354.630 Hz, Major Second
+        dw      $0091, $09d0  ; 2511.605 Hz, Minor Third
+        dw      $008a, $0a38  ; 2616.256 Hz, Major Third
+        dw      $007f, $0ae7  ; 2790.673 Hz, Fourth
+        dw      $0077, $0b7f  ; 2943.288 Hz, Diminished Fifth
+        dw      $006e, $0c44  ; 3139.507 Hz, Fifth
+        dw      $0065, $0d15  ; 3348.807 Hz, Minor Sixth
+        dw      $0060, $0da0  ; 3488.341 Hz, Major Sixth
+        dw      $0057, $0eb7  ; 3767.408 Hz, Minor Seventh
+        dw      $0052, $0f54  ; 3924.383 Hz, Major Seventh

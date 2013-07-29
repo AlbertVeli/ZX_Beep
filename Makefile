@@ -4,7 +4,7 @@
 #
 # Albert Veli
 
-PROGGY = prelude
+PROGGY = furelise
 
 # Main source file
 SRC = $(PROGGY).asm
@@ -29,7 +29,8 @@ REMS = \
 -r "          |" \
 -r "         ()"
 SCREEN = ZX_Tap/examples/googledoodle.scr
-ZXTOPTS = $(REMS) -s $(SCREEN) -b 0 -p 0 -i 7
+#ZXTOPTS = $(REMS) -s $(SCREEN) -b 0 -p 0 -i 7
+ZXTOPTS =
 
 ASDIR = z80asm
 AS = $(ASDIR)/z80asm
