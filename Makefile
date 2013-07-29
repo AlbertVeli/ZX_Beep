@@ -1,16 +1,16 @@
-# All Rights Reversed - No Rights Reserved
+# (k) ALL RIGHTS REVERSED - Reprint what you like
 #
 # Prickle-Prickle, the 53rd day of Confusion in the YOLD 3179
 #
 # Albert Veli
 
-PROGGY = beep
+PROGGY = prelude
 
 # Main source file
 SRC = $(PROGGY).asm
 
 # Sources included from main source file
-INCSRCS = octaves.asm sweep.asm mandom_mod.asm
+INCSRCS = beep_song.asm octaves_c.asm
 
 # Probably no need to change anything below this line
 
