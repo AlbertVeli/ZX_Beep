@@ -87,5 +87,91 @@ shift_loop:
 	rr e			; E >>= 1, bit 7 <- carry
 	jp	shift_loop
 shift_done:
-	call	$03b5		; Call BEEPER routine in ROM
+	call	single_beep	; Call BEEPER routine in ROM
+	ret
+
+
+;;; From Spectrum 48k ROM ($03b5)
+;;;
+;;; DE = #cycles - 1
+;;; HL = tone period
+;;;
+;;; The tone period is measured in T states and consists of
+;;; three parts: a coarse part (H register), a medium part
+;;; (bits 7..2 of L) and a fine part (bits 1..0 of L) which
+;;; contribute to the waveform timing as follows:
+;;;
+;;;                          coarse     medium        fine
+;;; duration of low  = 118 + 1024 * H + 16 * (L>>2) + 4 * (L & 3)
+;;; duration of hi   = 118 + 1024 * H + 16 * (L>>2) + 4 * (L & 3)
+;;;
+;;; Tp = tone period = 236 + 2048 * H + 32 * (L>>2) + 8 * (L & 3)
+;;;                  = 236 + 2048 * H + 8 * L = 236 + 8 * HL
+;;;
+single_beep:
+	di			; Disable Interrupts so they don't disturb timing
+	ld	a, l
+	srl	l
+	srl	l		; L >>= 2, medium part of tone period
+	cpl
+	and	$03		; A = L&3 = fine part of tone period
+	ld	c, a		; bc = 0-3
+	ld	b, $00
+	ld	ix, ix_plus3	; IX = ix_plus3 + bc (0-3)
+	add	ix, bc		;   IX holds address of entry into the loop
+				;   the loop will contain 0-3 NOPs, implementing
+				;   the fine part of the tone period.
+
+	;; A = val to write to beeper port
+	;; bits 0-2 = border colour
+	;; bit 3 = loud sound output
+	;; bit 4 = high or low pulse
+	ld	a, ($5C48)	; BORDCR
+	and	$38		; bits 5..3 contain border colour
+	rrca			; border colour bits moved to 2..0
+	rrca			;   to match border bits on port #FE
+	rrca			;
+	or	$08		; bit 3 set (tape output bit on port #FE)
+				;   for loud sound output
+ix_plus3:
+	nop		  ;(4)	; optionally executed NOPs for small
+	nop		  ;(4)	;   adjustments to tone period
+	nop		  ;(4)
+;;; ix_plus0:
+	inc	b	  ;(4)
+	inc	c	  ;(4)
+
+	;; hl_loop will loop $3f*b + c times = ~2048 * b t-states
+hl_lp:
+	dec	c	  ;(4)	; timing loop for duration of
+	jr	nz, hl_lp ;(12/7) high or low pulse of waveform
+
+	ld	c, $3f	  ;(7)
+	dec	b	  ;(4)
+	jp	nz, hl_lp ;(10) ; to H&L loop
+
+	xor	$17	  ;(7)	; toggle output beep bit (and border)
+	out	($fe), a  ;(11)	; output pulse
+
+	ld	b, h	  ;(4)	; B = coarse part of tone period
+	ld	c, a	  ;(4)	; save port ($fe) output byte in C
+	bit	4, a	  ;(8)	; if new output bit is high, go
+	jr	nz, again ;(12/7)   to again
+
+	ld	a, d	  ;(4)	; one cycle of waveform has completed
+	or	e	  ;(4)	;   (low->low). if cycle countdown = 0
+	jr	z, end	  ;(12/7)   go to end
+
+	ld	a, c	  ;(4)	; restore output byte for port #FE
+	ld	c, l	  ;(4)	; C = medium part of tone period
+	dec	de	  ;(6)	; decrement cycle count
+	jp	(ix)	  ;(8)	; do another cycle
+
+again:				; halfway through cycle
+	ld	c, l	  ;(4)	; C = medium part of tone period
+	inc	c	  ;(4)	; adds 16 cycles to make duration of high = duration of low
+	jp	(ix)	  ;(8)	; do high pulse of tone
+
+end:
+	ei			; Enable Interrupts
 	ret
