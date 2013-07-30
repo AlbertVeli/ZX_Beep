@@ -10,7 +10,7 @@ PROGGY = furelise
 SRC = $(PROGGY).asm
 
 # Sources included from main source file
-INCSRCS = beep_song.asm octaves_c.asm
+INCSRCS = beep_song.asm octaves.asm
 
 # Probably no need to change anything below this line
 
