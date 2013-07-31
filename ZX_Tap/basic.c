@@ -134,6 +134,7 @@ struct keyword {
 #define LOAD_C 0xef
 #define PRINT_C 0xf5
 #define RAND_C 0xf9
+#define CLS_C 0xfb
 #define CLEAR_C 0xfd
 
 static struct keyword keywords[] = {
@@ -147,6 +148,7 @@ static struct keyword keywords[] = {
    { "LOAD",  STATEMENT, LOAD_C },
    { "PRINT",  STATEMENT, PRINT_C },
    { "RANDOMIZE",  STATEMENT, RAND_C },
+   { "CLS",  STATEMENT, CLS_C },
    { "CLEAR",  STATEMENT, CLEAR_C },
    { NULL, NONE, 0 }
 };
@@ -364,6 +366,7 @@ int basic_add_line(char *line)
    int lineno;
    enum stype state;
    char *orgline = line;
+   char curr_statement = 0;
    int i;
 
    if (!line) {
@@ -407,21 +410,25 @@ int basic_add_line(char *line)
             goto line_end;
          }
 
-         /* keycode is in next_token[0] */
-         write_lbyte(next_token[0]);
+         curr_statement = next_token[0];
+
+         /* keycode is in curr_statement */
+         write_lbyte(curr_statement);
 
          /* Next state */
-         if (((uint8_t)next_token[0] == INK_C) ||
-             ((uint8_t)next_token[0] == PAPER_C) ||
-             ((uint8_t)next_token[0] == BORDER_C) ||
-             ((uint8_t)next_token[0] == CLEAR_C)) {
+         if ((uint8_t)curr_statement == CLS_C) {
+            state = EXP_END;
+         } else if (((uint8_t)curr_statement == INK_C) ||
+                    ((uint8_t)curr_statement == PAPER_C) ||
+                    ((uint8_t)curr_statement == BORDER_C) ||
+                    ((uint8_t)curr_statement == CLEAR_C)) {
             state = EXP_VAL_OR_NUM;
-         } else if (((uint8_t)next_token[0] == PRINT_C) ||
-                    ((uint8_t)next_token[0] == RAND_C)) {
+         } else if (((uint8_t)curr_statement == PRINT_C) ||
+                    ((uint8_t)curr_statement == RAND_C)) {
             state = EXP_USR;
-         } else if ((uint8_t)next_token[0] == LOAD_C) {
+         } else if ((uint8_t)curr_statement == LOAD_C) {
             state = EXP_STRING;
-         } else if ((uint8_t)next_token[0] == REM_C) {
+         } else if ((uint8_t)curr_statement == REM_C) {
             /* REM, write rest of line */
             if (line) line++; /* eat first space */
             if (line) {
@@ -524,7 +531,7 @@ int basic_add_line(char *line)
          if ((uint8_t)next_token[0] == ':') {
             /* : */
             state = EXP_STATEMENT;
-         } else if (((uint8_t)linebuf[0] == LOAD_C) &&
+         } else if (((uint8_t)curr_statement == LOAD_C) &&
                     (next_token_type == FUNCTION) &&
                     ((uint8_t)next_token[0] == CODE_C)) {
             /* CODE_C (with LOAD_C at beginning) */

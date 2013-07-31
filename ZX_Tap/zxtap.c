@@ -268,7 +268,7 @@ int create_basic_loader(void)
 
    /* Load screen (if -s is given) */
    if (opt.scrfile) {
-      snprintf(line, sizeof(line) - 1, "%d LOAD \"Screen\" CODE", lineno);
+      snprintf(line, sizeof(line) - 1, "%d CLS : LOAD \"Screen\" CODE", lineno);
       lineno += 10;
       if (basic_add_line(line)) {
          return 1;
