@@ -37,7 +37,7 @@ AS = $(ASDIR)/z80asm
 # Flags (for freqs.c)
 CFLAGS = -O2 -W -Wall
 
-all: $(TAP)
+all: $(TAP) engines
 
 $(TAP): $(BIN) $(ZXTAP)
 	$(ZXTAP) -o $@ $(ZXTOPTS) $(BIN)
@@ -66,7 +66,10 @@ $(AS).c:
 freqs: freqs.o
 	$(CC) $(LDFLAGS) -o $@ freqs.o $(LIBS)
 
-.PHONY: clean distclean
+.PHONY: clean distclean engines
+
+engines:
+	make -C engines
 
 clean:
 	rm -f $(TAP) $(BIN) freqs freqs.o *~
@@ -74,3 +77,4 @@ clean:
 distclean: clean
 	make -C ZX_Tap clean
 	make -C $(ASDIR) clean
+	make -C engines clean

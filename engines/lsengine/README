@@ -1,0 +1,52 @@
+Lyndon Sharp's beeper music engine
+Reverse-engineering, modifications, converter by Shiru (shiru@mail.ru)
+
+
+Features
+
+The engine provides two channels of tone, without volume or timbre
+control. There is drum channels with six drum sounds, it is mixed to
+tone channels, so tone is never interrupted. There is always small gap
+between the rows, like in Music Box and Music Studio engines.
+
+
+How to make music
+
+There is no dedicated editor for the engine. You can make music using
+any tracker with XM format support. You have to follow certain
+limitations. You can hear sound while editing using template module
+provided, it has sounds sampled from the engine, so the sound is
+somewhat similar to the end result, although not much. After you have
+made a song, you can convert it to an assembly source file with data
+in needed format.
+
+You can use patterns with arbitrary lengths in your song. Module
+should have no less than two channels. You can loop the order list to
+any position. You can only use tempo to change speed, BPM value is
+ignored.
+
+To set speed, you can use global tempo, or use Fxx effects on the
+first row of a pattern. Every pattern can have own speed. The speed
+will be recalculated as needed, to closest possible in the player.
+
+Supported note range is B-1 to A-5.
+
+You can put drums to any channel, only one drum can be played on a
+row. Drum sounds are mapped to notes C-4,D-4,E-4,F-4,G-4.
+
+
+Music data format
+
+List of 16-bit pointers to patterns, LSB/MSB
+0
+16-bit pointer to loop point (in the list of the patterns above)
+Patterns data
+
+
+Pattern data format
+
+One byte of pattern length (0 means 256), one byte of pattern
+speed. Then all the bytes of the first tone channel, one byte per row,
+and all the bytes of the second tone channel. 6 least significant bits
+of every byte are note number (0 is mute, 1 is B-1), 2 top bits of
+notes of both channels are drum number *2.
