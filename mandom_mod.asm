@@ -3,7 +3,7 @@
 ;;; Old Swedish folk song, from a time long
 ;;; before the destructive age of copyright...
 ;;;
-;;; All Rights Reversed - No Rights Reserved
+;;; (k) ALL RIGHTS REVERSED - Reprint what you like
 ;;;
 ;;; Prickle-Prickle, the 53rd day of Confusion in the YOLD 3179
 ;;;
@@ -29,7 +29,7 @@
 ;;; Example. 19,4 -> E3, Eigth note.
 
 ;;; Verse, part 1
-mandom_mod:
+_mandom_mod:
 	;;      Am                                  F
 	db	19,4, 0,4, 19,3, 0,3, 19,4, 0,4,    24,4, 8,5, 24,5, 8,4, 12,4, 24,4, 20,4, 12,4, 15,4
 	;;      G7                                   C
@@ -38,11 +38,11 @@ mandom_mod:
 	db	12,3,  8,4, 15,4, 12,5, 24,5, 12,5, 24,5, 10,4, 12,4,   10,4, 3,5, 10,5, 15,4, 3,4,  7,3, 10,4, 7,4
 	;;	D7                                                     G
 	db	7,3, 12,4, 15,4,  5,4, 21,4, 15,5, 21,5, 15,5, 21,5,   5,3, 14,5, 22,5, 24,5, 22,5, 5,3, 17,4, 24,4
-mandom_len:
-	dw	($ - mandom_mod) / 2
+_mandom_len:
+	dw	($ - _mandom_mod) / 2
 
 ;;; Verse part 2
-mandom2_mod:
+_mandom2_mod:
 	;;      Am                                                    E7
 	db	15,3, 0,5, 7,5, 12,4, 15,4, 19,4, 17,4, 15,5, 17,5,   14,4, 19,4, 14,3, 12,3, 11,4, 5,4
 	;;	Am                                                  E
@@ -51,37 +51,37 @@ mandom2_mod:
 	db	15,4, 0,4, 7,5, 0,5, 12,4, 15,4, 19,5, 12,5, 17,5, 12,5, 15,4,   14,4, 19,4, 14,4, 5,4, 12,4, 2,4, 11,4, 5,4
 	;; 	Am
 	db	12,4, 0,4, 7,4, 15,4, 12,4, 0,4, 24,5, 19,5, 0,4,   12,4, 0,4, 7,5, 24,5, 19,5, 15,5, 12,3, 24,4, 0,4
-mandom2_len:
-	dw	($ - mandom2_mod) / 2
+_mandom2_len:
+	dw	($ - _mandom2_mod) / 2
 
 ;;; There is also a Verse, part 3, but it is not included.
 ;;; I like part 1 and 2 best. There is even a part 4, but
 ;;; it is an exact copy of part 2. No need for double info.
 
-play_mandom_mod:
-	ld	de, mandom_mod
-	ld	hl, mandom_len	; Size matters
-	call	play_song
+mandom_mod.play:
+	ld	de, _mandom_mod
+	ld	hl, _mandom_len	; Size matters
+	call	engine.play
 	;; Play verse again to build up an illusion of a long (kal) song
-	ld	de, mandom_mod
-	ld	hl, mandom_len
-	call	play_song
+	ld	de, _mandom_mod
+	ld	hl, _mandom_len
+	call	engine.play
 	;; Finally, second half of first half
-	ld	de, mandom2_mod
-	ld	hl, mandom2_len
-	call	play_song
+	ld	de, _mandom2_mod
+	ld	hl, _mandom2_len
+	call	engine.play
 	;; And first half again :)
-	ld	de, mandom_mod
-	ld	hl, mandom_len
-	call	play_song
-	ld	de, mandom2_mod
-	ld	hl, mandom2_len
-	call	play_song
-	ld	de, mandom_mod
-	ld	hl, mandom_len
-	call	play_song
-	ld	de, mandom_mod
-	ld	hl, mandom_len
-	call	play_song
+	ld	de, _mandom_mod
+	ld	hl, _mandom_len
+	call	engine.play
+	ld	de, _mandom2_mod
+	ld	hl, _mandom2_len
+	call	engine.play
+	ld	de, _mandom_mod
+	ld	hl, _mandom_len
+	call	engine.play
+	ld	de, _mandom_mod
+	ld	hl, _mandom_len
+	call	engine.play
 	;; Ok, that's enough, return to caller
 	ret

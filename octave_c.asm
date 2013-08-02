@@ -1,7 +1,7 @@
 ;;; (k) ALL RIGHTS REVERSED - Reprint what you like
 
 	;;	HL     DE       Freq       Interval
-C2:
+octave.C2:
         dw      $1a03, $0041  ; 65.406 Hz, Unison
         dw      $18f8, $0044  ; 68.132 Hz, Minor Second
         dw      $171c, $004a  ; 73.582 Hz, Major Second
@@ -14,7 +14,7 @@ C2:
         dw      $0f90, $006d  ; 109.011 Hz, Major Sixth
         dw      $0e67, $0076  ; 117.732 Hz, Minor Seventh
         dw      $0dd2, $007b  ; 122.637 Hz, Major Seventh
-C3:
+octave.C3:
         dw      $0cf3, $0083  ; 130.813 Hz, Unison
         dw      $0c6d, $0088  ; 136.263 Hz, Minor Second
         dw      $0b7f, $0093  ; 147.164 Hz, Major Second
@@ -27,7 +27,7 @@ C3:
         dw      $07b9, $00da  ; 218.021 Hz, Major Sixth
         dw      $0725, $00eb  ; 235.463 Hz, Minor Seventh
         dw      $06da, $00f5  ; 245.274 Hz, Major Seventh
-C4:
+octave.C4:
 	dw	$066b, $0106  ; 261.626 Hz, Unison
 	dw	$0628, $0111  ; 272.527 Hz, Minor Second
 	dw	$05b1, $0126  ; 294.329 Hz, Major Second
@@ -40,7 +40,7 @@ C4:
 	dw	$03ce, $01b4  ; 436.043 Hz, Major Sixth
 	dw	$0384, $01d7  ; 470.926 Hz, Minor Seventh
 	dw	$035e, $01eb  ; 490.548 Hz, Major Seventh
-C5:
+octave.C5:
 	dw	$0327, $020b  ; 523.251 Hz, Unison
 	dw	$0305, $0221  ; 545.053 Hz, Minor Second
 	dw	$02ca, $024d  ; 588.658 Hz, Major Second
@@ -53,7 +53,7 @@ C5:
 	dw	$01d8, $0368  ; 872.085 Hz, Major Sixth
 	dw	$01b3, $03ae  ; 941.852 Hz, Minor Seventh
 	dw	$01a0, $03d5  ; 981.096 Hz, Major Seventh
-C6:
+octave.C6:
 	dw	$0185, $0417  ; 1046.502 Hz, Unison
 	dw	$0174, $0442  ; 1090.107 Hz, Minor Second
 	dw	$0156, $0499  ; 1177.315 Hz, Major Second
@@ -66,7 +66,7 @@ C6:
 	dw	$00dd, $06d0  ; 1744.170 Hz, Major Sixth
 	dw	$00cb, $075c  ; 1883.704 Hz, Minor Seventh
 	dw	$00c1, $07aa  ; 1962.192 Hz, Major Seventh
-C7:
+octave.C7:
         dw      $00b4, $082d  ; 2093.005 Hz, Unison
         dw      $00ab, $0884  ; 2180.213 Hz, Minor Second
         dw      $009c, $0933  ; 2354.630 Hz, Major Second

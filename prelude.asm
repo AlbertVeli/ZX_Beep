@@ -11,9 +11,9 @@
 	org	32768
 
 start:
-	ld	de, C2
-	call	set_octave
-	call	play_prelude
+	ld	de, octave.C2
+	call	octave.set
+	call	prelude.play
 	ret
 
 
@@ -101,18 +101,18 @@ prelpost_len:
 
 
 ;;; Each row above is 8 notes
-rowlen:	dw	8
+prelude.rowlen:	dw	8
 
 double_play:
 	push	de
-	ld	hl, rowlen
-	call	play_song
+	ld	hl, prelude.rowlen
+	call	engine.play
 	pop	de
-	ld	hl, rowlen
-	call	play_song
+	ld	hl, prelude.rowlen
+	call	engine.play
 	ret
 
-play_prelude:
+prelude.play:
 	ld	de, prel_1
 	call	double_play
 	ld	de, prel_2
@@ -180,13 +180,10 @@ play_prelude:
 	;; Last part
 	ld	de, prel_post
 	ld	hl, prelpost_len
-	call	play_song
+	call	engine.play
 
 	ret
 
 
-	;; Include play_song/set_octave subroutines
-	include "beep_song.asm"
-
-	;; Include octaves data
-	include "octaves_c.asm"
+	;; Include engine.play/set_octave subroutines
+	include "abengine.asm"

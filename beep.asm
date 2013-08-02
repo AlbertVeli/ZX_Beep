@@ -1,4 +1,4 @@
-;;; All Rights Reversed - No Rights Reserved
+;;; (k) ALL RIGHTS REVERSED - Reprint what you like
 ;;;
 ;;; Boomtime, the 51st day of Confusion in the YOLD 3179
 ;;;
@@ -13,18 +13,18 @@
 ;;; entry point
 start:
 	;; Sweep the dance floory, go speccy!
-	ld	de, A1
+	ld	de, octave.A1
 	call	sweep_octave
-	ld	de, A2
+	ld	de, octave.A2
 	call	sweep_octave
-	ld	de, A2
+	ld	de, octave.A2
 	call	sweepdown_octave
-	ld	de, A1
+	ld	de, octave.A1
 	call	sweepdown_octave
 
 	;; Use A2 as base octave for song
-	ld	de, A2
-	call	set_octave
+	ld	de, octave.A2
+	call	octave.set
 
 	;; Ready, Set ...
 	;;    ,
@@ -41,7 +41,7 @@ start:
 	;;
 	;;            oOo
 
-	call	play_mandom_mod
+	call	mandom_mod.play
 
 	;; Sweep baby, baby
 	ld	de, A7
@@ -83,11 +83,8 @@ start:
 	ret	;; Return to basic... Bye.
 
 
-	;; Include play_song/set_octave subroutines
-	include "beep_song.asm"
-
-	;; Include octaves data
-	include "octaves.asm"
+	;; Include engine subroutines
+	include "abengine.asm"
 
 	;; Include sweep "special effect" data
 	include "sweep.asm"

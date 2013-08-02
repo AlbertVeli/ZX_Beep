@@ -11,26 +11,26 @@
 	org	32768
 
 start:
-	ld	de, A1
-	call	set_octave
+	ld	de, octave.A1
+	call	octave.set
 	ld	de, fur_elise_1
 	ld	hl, furelen1
-	call	dual_song
+	call	dual_play
 	ld	de, fur_elise_1
 	ld	hl, furelen1
-	call	dual_song
+	call	dual_play
 	ld	de, fur_elise_2
 	ld	hl, furelen2
-	call	dual_song
+	call	dual_play
 	ld	de, fur_elise_1
 	ld	hl, furelen1
-	call	dual_song
+	call	dual_play
 	ld	de, fur_elise_2
 	ld	hl, furelen2
-	call	dual_song
+	call	dual_play
 	ld	de, fur_elise_1
 	ld	hl, furelen1
-	call	dual_song
+	call	dual_play
 
 	ret
 
@@ -57,7 +57,6 @@ furelen1:
 	dw	47
 
 fur_elise_2:
-
 	db	0,38,3, 0,39,3, 0,41,3
 	db	1,15,43,2, 1,22,43,2, 1,27,43,2
 	db	0,34,3, 0,44,3, 0,43,3
@@ -74,7 +73,7 @@ furelen2:
 
 ;;; HL = Pointer to songlen
 ;;; DE = Pointer to song notes
-dual_song:
+dual_play:
 	ld	b, (hl)		; BC = songlen
 	inc	hl
 	ld	c, (hl)
@@ -180,7 +179,4 @@ dn_loop:
 
 
 	;; Include play_song/set_octave subroutines
-	include "beep_song.asm"
-
-	;; Include octaves data
-	include "octaves.asm"
+	include "abengine.asm"

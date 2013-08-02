@@ -5,14 +5,6 @@
 ;;; Albert Veli
 
 
-;;; Octave in DE
-set_octave:
-	ld	hl, base_octave
-	ld	(hl), e
-	inc	hl
-	ld	(hl), d
-	ret
-
 ;;; HL = Pointer to songlen
 ;;; DE = Pointer to song notes
 play_song:
@@ -49,10 +41,6 @@ song_end:
 	ld	b, a
 	ret
 
-;;; Base octave for songs.
-;;; Call set_octave to set it.
-base_octave:
-	dw	0
 
 ;;; Arguments:
 ;;; D - number of semitones above base_octave (aka pitch)
@@ -65,7 +53,7 @@ beeper:
 	add	hl, hl
 	ex	de, hl		; DE = HL
 	;; Move everything up/down octaves by changing base_octave
-	ld	hl, (base_octave)	; HL = address of first note in first octave
+	ld	hl, (_base_octave)	; HL = address of first note in first octave
 
 	add	hl, de		; HL = HL + DE
 	;; Read 2 bytes into DE (since HL is busy), frequency
@@ -175,3 +163,7 @@ again:				; halfway through cycle
 end:
 	ei			; Enable Interrupts
 	ret
+
+
+	;; Include octaves data
+	include "octave.asm"
